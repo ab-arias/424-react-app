@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
-import { fakeAuth } from "../utils/FakeAuth.js"
+// import { fakeAuth } from "../utils/FakeAuth.js"
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const AuthContext = createContext({});
 
@@ -10,14 +11,15 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
 
     const handleLogin = async (username, password) => {
-            const token = await fakeAuth(username, password);
-            if (token){
-                setToken(token);
-                navigate("/landing");
-            }
-            else {
-                window.alert("Username or password incorrect")
-            }
+            makePostCall(username, password).then( result => {
+                if (result && result.status === 201){
+                    setToken(result['data']);
+                    navigate("/landing");
+                }
+                else {
+                    window.alert("Username or password incorrect")
+                }
+            });
     }
 
     const handleLogout = () => {
@@ -36,6 +38,17 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
+async function makePostCall(username, password){
+    try {
+        const response = await axios.post('http://localhost:4500/users', {username : username, password : password});
+        return response;
+    }
+    catch (error) {
+       console.log(error);
+       return false;
+    }
+  }
 
 //give callers access to context
 export const useAuth = () => useContext(AuthContext);
