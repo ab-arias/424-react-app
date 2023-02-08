@@ -11,19 +11,7 @@ import { AuthProvider } from "./context/AuthProvider";
 export const AuthContext = React.createContext(null);
 
 const App = () => {
-    const [token, setToken] = React.useState(null)
-
-    /*const handleLogin = async() => {
-        const token = await makePostCall(person).then( result => {
-            if (result && result.status === 201)
-               setCharacters([...characters, result.data] );
-            });
-        setToken(token);
-    };
-
-    const handleLogout = () => {
-        setToken(null);
-    };*/
+    //const [token, setToken] = React.useState(null)
 
     return (
         <>

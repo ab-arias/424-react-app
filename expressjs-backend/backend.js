@@ -12,7 +12,10 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
 
-app.get
+app.get('/users', (req, res) => {
+    console.log(userTable)
+    res.status(201).send(userTable).end()
+});
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;

@@ -23,13 +23,24 @@ export const AuthProvider = ({ children }) => {
     }
 
     const handleRegister = async (username, password, confirmPassword) => {
-
         makeRegisterPostCall(username, password, confirmPassword).then( result => {
             if (result && result.status === 201){
                 console.log(result)
             }
             else {
                 window.alert("Invalid Password")
+            }
+        });
+    }
+
+    const handleGetAll = async () => {
+        console.log("in handle get all")
+        getAll().then( result => {
+            if (result){
+                console.log(result)
+            }
+            else {
+                window.alert("Can't Get Users")
             }
         });
     }
@@ -42,7 +53,8 @@ export const AuthProvider = ({ children }) => {
         token,
         onLogin: handleLogin,
         onLogout: handleLogout,
-        onRegister: handleRegister
+        onRegister: handleRegister,
+        getUsers : handleGetAll
     };
 
     return (
@@ -51,6 +63,19 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
+async function getAll(){
+    console.log("making get call")
+    try{
+      const response = await axios.get('http://localhost:4500/users');
+      return response.data;
+    }
+    catch (error){
+      //logging error to console
+      console.log(error);
+      return false;
+    }
+  }
 
 async function makePostCall(username, password){
     try {
