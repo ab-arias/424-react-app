@@ -12,10 +12,7 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
+app.get
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
@@ -28,6 +25,28 @@ app.post("/users", (req, res) => {
         res.status(404).end();
     }
 });
+
+app.post("/account/register", (req, res) => {
+    const registerUser = req.body;
+    const tested = testPassword(registerUser["password"]);
+    if(registerUser["password"] === registerUser["confirmPassword"] && tested) {
+        addUser({username: registerUser["username"], password: registerUser["password"]});
+        res.status(201).end();
+    }
+    else {
+        console.log("error")
+        res.status(404).end();
+    }
+});
+
+function testPassword(password) {
+    let myRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{1,}$");
+    return myRegex.test(password);
+}
+
+function addUser(user){
+    userTable.push(user);
+}
 
 const userTable = [
         {
