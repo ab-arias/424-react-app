@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 4500;
+const userServices = require("./models/user-services");
 
 app.use(cors());
 
@@ -12,16 +13,16 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
 
-app.get('/users', (req, res) => {
-    console.log(userTable)
-    res.status(201).send(userTable).end()
-});
+// app.get('/users', (req, res) => {
+//     console.log(userTable)
+//     res.status(201).send(userTable).end()
+// });
 
-app.post("/users", (req, res) => {
-    const userToAdd = req.body;
-    const foundUser = userTable.find(user => user['username'] === userToAdd["username"] && user['password'] === userToAdd["password"]);
+app.post("/users", async (req, res) => {
+    const user = req.body;
+    const foundUser = await userServices.loginUser(user)
     if(foundUser) {
-        res.status(201).send("2342f2f1d131rf12").end();
+        res.status(201).send(foundUser.token).end();
     }
     else {
         console.log("error")
@@ -29,11 +30,11 @@ app.post("/users", (req, res) => {
     }
 });
 
-app.post("/account/register", (req, res) => {
+app.post("/account/register", async (req, res) => {
     const registerUser = req.body;
     const tested = testPassword(registerUser["password"]);
     if(registerUser["password"] === registerUser["confirmPassword"] && tested) {
-        addUser({username: registerUser["username"], password: registerUser["password"]});
+        await userServices.addUser({username: registerUser["username"], password: registerUser["password"], token: "2342f2f1d131rf12" });
         res.status(201).end();
     }
     else {
@@ -46,14 +47,3 @@ function testPassword(password) {
     let myRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{1,}$");
     return myRegex.test(password);
 }
-
-function addUser(user){
-    userTable.push(user);
-}
-
-const userTable = [
-        {
-            username : "abe",
-            password : "password" 
-        }
-    ]

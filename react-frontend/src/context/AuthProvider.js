@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-// import { fakeAuth } from "../utils/FakeAuth.js"
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
@@ -12,6 +11,7 @@ export const AuthProvider = ({ children }) => {
 
     const handleLogin = async (username, password) => {
             makePostCall(username, password).then( result => {
+                console.log(result)
                 if (result && result.status === 201){
                     setToken(result['data']);
                     navigate("/landing");
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     const handleRegister = async (username, password, confirmPassword) => {
         makeRegisterPostCall(username, password, confirmPassword).then( result => {
             if (result && result.status === 201){
-                console.log(result)
+                navigate("/home")
             }
             else {
                 window.alert("Invalid Password")
@@ -65,7 +65,6 @@ export const AuthProvider = ({ children }) => {
 };
 
 async function getAll(){
-    console.log("making get call")
     try{
       const response = await axios.get('http://localhost:4500/users');
       return response.data;
@@ -80,6 +79,7 @@ async function getAll(){
 async function makePostCall(username, password){
     try {
         const response = await axios.post('http://localhost:4500/users', {username : username, password : password});
+        console.log(response);
         return response;
     }
     catch (error) {

@@ -18,11 +18,11 @@ export const Register = () => {
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type= "text" value = {password} onChange = {e => setPass(e.target.value)}></input>
+                    <input type= "password" value = {password} onChange = {e => setPass(e.target.value)}></input>
                 </div>
                 <div>
                     <label>Confirm Password</label>
-                    <input type= "text" value = {confirmPassword} onChange = {e => setConfirmPass(e.target.value)}></input>
+                    <input type= "password" value = {confirmPassword} onChange = {e => setConfirmPass(e.target.value)}></input>
                 </div>
            </form>
             <button type = "button" onClick = {e => value.onRegister(username, password, confirmPassword)}>
