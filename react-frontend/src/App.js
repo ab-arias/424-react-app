@@ -4,14 +4,12 @@ import {Landing} from "./Landing.js";
 import {Register} from "./Register.js";
 import React, {useState} from "react";
 import {ProtectedRoute} from "./utils/ProtectedRoute";
-//import { fakeAuth } from "./utils/FakeAuth.js";
 import { useAuth } from "./context/AuthProvider";
 import { AuthProvider } from "./context/AuthProvider";
 
 export const AuthContext = React.createContext(null);
 
 const App = () => {
-    //const [token, setToken] = React.useState(null)
 
     return (
         <>

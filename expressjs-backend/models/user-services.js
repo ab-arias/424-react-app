@@ -27,6 +27,7 @@ async function getUsersByName(name) {
     return result;
 }
 
+
 async function addUser(user) {
     console.log(user)
     const userSchema = getDbConnection().model("User", User);
@@ -60,7 +61,9 @@ async function updateUser(user, update) {
 }
 
 async function loginUser(req) {
+    
     const userSchema = getDbConnection().model("User", User);
+    console.log(req)
     const username = req.username;
     const password = req.password;
     try {
@@ -69,10 +72,6 @@ async function loginUser(req) {
 
         if (password === existingUser.password) {
             console.log(existingUser.token)
-            // const payload = {
-            //     name: existingUser.username,
-            // };
-            //const token = jwt.sign(payload, "secret", { expiresIn: 31556926 });
             return existingUser;
         }
         else {

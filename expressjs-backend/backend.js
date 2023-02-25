@@ -3,6 +3,8 @@ const cors = require('cors');
 const app = express();
 const port = 4500;
 const userServices = require("./models/user-services");
+const createToken = require("./utils/tokens")
+const authenticateToken = require("./utils/authToken")
 
 app.use(cors());
 
@@ -10,7 +12,7 @@ app.use(express.json());
 
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Express backend for 424 App listening at http://localhost:${port}`);
 });
 
 // app.get('/users', (req, res) => {
@@ -18,9 +20,14 @@ app.listen(port, () => {
 //     res.status(201).send(userTable).end()
 // });
 
+app.get('/api/userOrders', authenticateToken, async (req, res) => {
+
+})
+
 app.post("/users", async (req, res) => {
     const user = req.body;
     const foundUser = await userServices.loginUser(user)
+    console.log(foundUser)
     if(foundUser) {
         res.status(201).send(foundUser.token).end();
     }
@@ -33,8 +40,9 @@ app.post("/users", async (req, res) => {
 app.post("/account/register", async (req, res) => {
     const registerUser = req.body;
     const tested = testPassword(registerUser["password"]);
+    const token = createToken({ username: registerUser["username"] });
     if(registerUser["password"] === registerUser["confirmPassword"] && tested) {
-        await userServices.addUser({username: registerUser["username"], password: registerUser["password"], token: "2342f2f1d131rf12" });
+        await userServices.addUser({username: registerUser["username"], password: registerUser["password"], token: token });
         res.status(201).end();
     }
     else {
