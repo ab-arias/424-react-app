@@ -1,15 +1,16 @@
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
 const port = 4500;
 const userServices = require("./models/user-services");
 const createToken = require("./utils/tokens")
-const authenticateToken = require("./utils/authToken")
 const https = require("https");
 const fs = require("fs");
 
-app.use(cors());
 
+app.use(cors());
+app.use(helmet());
 app.use(express.json());
 
 https.createServer(
@@ -23,11 +24,6 @@ https.createServer(
   ).listen(port, () => {
     console.log(`server is running at port ${port}`);
   });
-
-// app.get('/users', (req, res) => {
-//     console.log(userTable)
-//     res.status(201).send(userTable).end()
-// });
 
 app.get('/api/userOrders', async (req, res) => {
     const users = await userServices.getUsers()
