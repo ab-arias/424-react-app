@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const [token, setToken] = useState(null);
+    const [list, setList] = useState(null)
 
     function handleCookie(cookieToken)  {
         // set token in cookie
@@ -33,7 +34,6 @@ export const AuthProvider = ({ children }) => {
 
     const handleLogin = async (username, password) => {
             makePostCall(username, password).then( result => {
-                console.log("handlogin: ", result)
                 if (result && result.status === 201){
                     
                     setToken(result['data']);
@@ -58,10 +58,9 @@ export const AuthProvider = ({ children }) => {
     }
 
     const handleGetAll = async () => {
-        console.log("in handle get all")
         getAll().then( result => {
             if (result){
-                console.log(result)
+                setList(result)
             }
             else {
                 window.alert("Can't Get Users")
@@ -79,7 +78,8 @@ export const AuthProvider = ({ children }) => {
         onLogin: handleLogin,
         onLogout: handleLogout,
         onRegister: handleRegister,
-        getUsers : handleGetAll
+        getUsers : handleGetAll,
+        list
     };
 
     return (
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }) => {
 
 async function getAll(){
     try{
-      const response = await axios.get('http://localhost:4500/users');
+      const response = await axios.get('https://localhost:4500/api/userOrders');
       return response.data;
     }
     catch (error){
@@ -103,7 +103,7 @@ async function getAll(){
 
 async function makePostCall(username, password){
     try {
-        const response = await axios.post('http://localhost:4500/users', {username : username, password : password});
+        const response = await axios.post('https://localhost:4500/users', {username : username, password : password});
         return response;
     }
     catch (error) {
@@ -114,7 +114,7 @@ async function makePostCall(username, password){
 
   async function makeRegisterPostCall(username, password, confirmPassword){
     try {
-        const response = await axios.post('http://localhost:4500/account/register', {username : username, password : password, confirmPassword : confirmPassword});
+        const response = await axios.post('https://localhost:4500/account/register', {username : username, password : password, confirmPassword : confirmPassword});
         return response;
     }
     catch (error) {

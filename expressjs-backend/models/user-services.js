@@ -27,9 +27,15 @@ async function getUsersByName(name) {
     return result;
 }
 
+async function getUsers() {
+    const userSchema = getDbConnection().model("User", User);
+    let result;
+    result = await userSchema.find({}, {username: true, token: true});
+    return result;
+}
+
 
 async function addUser(user) {
-    console.log(user)
     const userSchema = getDbConnection().model("User", User);
     try {
       const userToAdd = new userSchema(user);
@@ -40,6 +46,8 @@ async function addUser(user) {
       return false;
     }
   }
+
+  
 
   async function deleteUser(user) {
     const userSchema = getDbConnection().model("User", User);
@@ -63,15 +71,12 @@ async function updateUser(user, update) {
 async function loginUser(req) {
     
     const userSchema = getDbConnection().model("User", User);
-    console.log(req)
     const username = req.username;
     const password = req.password;
     try {
         const existingUser = await userSchema.findOne({username: username });
-        console.log(existingUser)
 
         if (password === existingUser.password) {
-            console.log(existingUser.token)
             return existingUser;
         }
         else {
@@ -85,6 +90,7 @@ async function loginUser(req) {
 
 
 exports.getUsersByName = getUsersByName;
+exports.getUsers = getUsers;
 exports.addUser = addUser;
 exports.updateUser = updateUser;
 exports.deleteUser = deleteUser;
